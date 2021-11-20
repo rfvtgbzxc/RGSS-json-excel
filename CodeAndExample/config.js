@@ -3,7 +3,7 @@ const bindFiles = {
   "Enemies": "AllAvailable",
   "Weapons": "AllAvailable",
 }
-const words = {
+const attributes = {
   "Actors": {
     "id": "id",
     "initial_level":"初始等级",
@@ -70,4 +70,4 @@ const words = {
 }
 
 exports.bindFiles = bindFiles;
-exports.words = words;
+exports.attributes = attributes;

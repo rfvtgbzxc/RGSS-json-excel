@@ -67,4 +67,4 @@ All successed!
 # 填写配置文件
 ### Demo中仅提供了Actors，Weapons和Enemies的数据，要处理更多的文件和数据，需要填写config.rb和config.js。
 - bind_files：描述要处理哪些数据库成员，对应值可以是"AllAvailable"或者一个数组，只有数组里的成员的数据会被同步。
-- words：用于在表格中，调整数据的名称。
+- attributes：用于在表格中，设定数据的名称和类型，部分数据（布尔变量）必须要声明类型，否则excel转换到rxdata时，其会被视为0或1。

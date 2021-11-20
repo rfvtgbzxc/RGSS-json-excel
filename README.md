@@ -66,4 +66,4 @@ Because this process is read-only to XLSX files, you can save Excel and run comm
 # Filling in the Configuration File
 ### Demo only provides data for Actors, Weapons, and Enemies. To process more files and data, you need to fill in config.rb and config.js.
 - bind_files：Describes which database members to process. The corresponding value can be "AllAvailable" or an array. Only the members of the array will be synchronized.
-- words：Used to adjust the name of the data in the table.
+- attributes: Use to set the names and types of data in a table. Some data (Boolean variables) must be typed, otherwise excel converts to RxData and it will be treated as 0 or 1, both are ture in ruby.

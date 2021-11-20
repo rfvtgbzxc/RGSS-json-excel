@@ -226,7 +226,16 @@ def rxDataToJson
   end
   puts "All successed!"
 end
-
+def parse(obj, type)
+  case type
+  when 'bool'
+    return true if obj == 1
+    return false if obj == 0
+    raise "unsupported bool value #{obj} !"
+  else
+    raise 'unsupported type!'
+  end
+end
 def excelToRxData
   for page_name, page_setting in ExcelToRxdataConfig::BindFiles
     if not File.exist?("Data/#{page_name}.rxdata")
@@ -248,12 +257,16 @@ def excelToRxData
     file = File.open("Data/#{page_name}_back.rxdata","wb")
     Marshal.dump(data, file)
     file.close
-    columns = page_setting == "AllAvailable" ? ExcelToRxdataConfig::Words[page_name].keys : page_setting
+    columns = page_setting == "AllAvailable" ? ExcelToRxdataConfig::Attributes[page_name].keys : page_setting
     for rowIndex in 1...data.size
       row = sheet.row(rowIndex)
-      item = data[row[0]]
+      item = data[row[0]]   
       for columnIndex in 1...columns.size
-        item.instance_variable_set("@#{columns[columnIndex]}",row[columnIndex])
+        cell = row[columnIndex]
+        # force convert if specified
+        type = ExcelToRxdataConfig::Attributes[page_name][columns[columnIndex]]['type']
+        cell = parse(cell, type) if not type.nil?
+        item.instance_variable_set("@#{columns[columnIndex]}", cell)
       end
     end
     file = File.open("Data/#{page_name}.rxdata","wb")

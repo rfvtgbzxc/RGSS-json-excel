@@ -1,6 +1,6 @@
 const fs = require('fs');
 const ExcelJS = require('exceljs');
-const { bindFiles, words } = require('./config');
+const { bindFiles, attributes } = require('./config');
 const { nextTick } = require('process');
 function readFileUsePromise(filename) {
   return new Promise((resolve) => {
@@ -66,13 +66,13 @@ async function JsonToExcel() {
     let colIndex = 1;
     let columns;
     if (bindFiles[pageName] === "AllAvailable") {
-      columns = Object.keys(words[pageName]);
+      columns = Object.keys(attributes[pageName]);
     }
     else {
       columns = bindFiles[pageName];
     }
     for (let attrName of columns) {
-      sheet.getColumn(colIndex).header = words[pageName][attrName];
+      sheet.getColumn(colIndex).header = attributes[pageName][attrName];
       colIndex++;
     }
     // 写属性值
@@ -111,7 +111,7 @@ async function ExcelToJson() {
     const rowIndex2Id = getRowIndex2Id(sheet);
     let columns;
     if (bindFiles[pageName] === "AllAvailable") {
-      columns = Object.keys(words[pageName]);
+      columns = Object.keys(attributes[pageName]);
     }
     else {
       columns = bindFiles[pageName];

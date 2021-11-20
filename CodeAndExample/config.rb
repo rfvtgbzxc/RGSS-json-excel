@@ -5,7 +5,7 @@ module ExcelToRxdataConfig
     'Enemies'=> 'AllAvailable',
     'Weapons'=> 'AllAvailable',
   }
-  Words = {
+  Attributes = {
     'Actors'=> {
       'id'=> 'id',
       'initial_level'=>'初始等级',
@@ -23,11 +23,26 @@ module ExcelToRxdataConfig
       'armor2_id'=>'头部防具',
       'armor3_id'=>'身体防具',
       'armor4_id'=>'装饰品',
-      'weapon_fix'=>'固定武器',
-      'armor1_fix'=>'固定盾',
-      'armor2_fix'=>'固定头部防具',
-      'armor3_fix'=>'固定身体防具',
-      'armor4_fix'=>'固定装饰品',
+      'weapon_fix'=>{
+        'type' => 'bool',
+        'name' => '固定武器'
+      },
+      'armor1_fix'=>{
+        'type' => 'bool',
+        'name' => '固定盾'
+      },
+      'armor2_fix'=>{
+        'type' => 'bool',
+        'name' => '固定头部防具'
+      },
+      'armor3_fix'=>{
+        'type' => 'bool',
+        'name' => '固定身体防具'
+      },
+      'armor4_fix'=>{
+        'type' => 'bool',
+        'name' => '固定装饰品'
+      }
     },
     'Enemies'=> {
       'id'=>'id',
