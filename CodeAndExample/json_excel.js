@@ -45,8 +45,8 @@ function getRowIndex2Id(sheet) {
 }
 async function JsonToExcel() {
   const workbook = new ExcelJS.Workbook();
-  if (await getFileExistenceUsePromise("DataBase.xlsx")) {
-    await workbook.xlsx.readFile("DataBase.xlsx");
+  if (await getFileExistenceUsePromise("Database.xlsx")) {
+    await workbook.xlsx.readFile("Database.xlsx");
   }
   for (let pageName in bindFiles) {
     const data = await readFileUsePromise(`Json/${pageName}.json`);
@@ -76,14 +76,14 @@ async function JsonToExcel() {
       colIndex++;
     }
     // 写属性值
-    for (let rowIndex = 2; rowIndex < lines.length; rowIndex++) {
+    for (let rowIndex = 2; rowIndex <= lines.length; rowIndex++) {
       for (let i = 0; i < columns.length; i++) {
-        const requestId = rowIndex2Id === null ? rowIndex - 1 : rowIndex2Id[rowIndex];
+        let requestId = rowIndex2Id === null ? rowIndex - 1 : (!!!rowIndex2Id[rowIndex] ? rowIndex - 1 : rowIndex2Id[rowIndex]);
         sheet.getRow(rowIndex).getCell(1 + i).value = lines[requestId][`:@${columns[i]}`];
       }
     }
   }
-  await workbook.xlsx.writeFile("DataBase.xlsx");
+  await workbook.xlsx.writeFile("Database.xlsx");
   console.log("JsonToExcel run successfully !")
 }
 async function ExcelToJson() {
@@ -94,11 +94,11 @@ async function ExcelToJson() {
     }
   }
   const workbook = new ExcelJS.Workbook();
-  if (await getFileExistenceUsePromise("DataBase.xlsx")) {
-    await workbook.xlsx.readFile("DataBase.xlsx");
+  if (await getFileExistenceUsePromise("Database.xlsx")) {
+    await workbook.xlsx.readFile("Database.xlsx");
   }
   else {
-    console.log(`ExcelToJson error: need file DataBase.xlsx!`);
+    console.log(`ExcelToJson error: need file Database.xlsx!`);
     return;
   }
   for (let pageName in bindFiles) {
