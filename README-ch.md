@@ -11,7 +11,7 @@
   * 用于将json转换为excel
 * excel-to-rxData √
   * 用于将excel转换为原生对象
-* more-smart-rxData_json_excel
+* smarter-rxData_json_excel
   * 不再需要nodejs和json作为中间态的脚本
 
 # 初始化（安装库和依赖）
@@ -64,7 +64,7 @@ All successed!
 ```
 因为这个过程对xlsx文件是只读的，所以可以不用关闭excel，保存后就可以运行指令对数据进行同步。
 
-## 三、填写配置文件
+# 填写配置文件
 ### Demo中仅提供了Actors，Weapons和Enemies的数据，要处理更多的文件和数据，需要填写config.rb和config.js。
 - bind_files：描述要处理哪些数据库成员，对应值可以是"AllAvailable"或者一个数组，只有数组里的成员的数据会被同步。
 - words：用于在表格中，调整数据的名称。
