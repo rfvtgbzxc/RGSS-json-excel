@@ -8,21 +8,62 @@
 * rgss-serializer
   * Use to convert native objects to JSON, referencing Marshal's data structure.
   * The part that is customized for RGSS is the handling of the Table type.
-* rgss-json-parser
-  * Use to convert JSON back to native data objects.
-* json-to-excel
-  * Use to convert JSON to Excel
-* excel-to-json
-  * Use to convert Excel to JSON
+* excel-to-rxData
+  * Use to convert Excel to native objects
+* smarter-rxData_json_excel
+  * Nodejs and JSON are no longer required as intermediate scripts
+
+# Initialize (install libraries and dependencies)
+### 1.Install nodejs
+### 2.Run the command in the CodeAndExample directory to install the JS library:
+``` shell
+npm install
+```
+### 3.Install ruby
+### 4.Run the command to install the Ruby library
+``` shell
+gem install read_excel
+```
 
 # Theoretical workflow
-### 1. Load RGSS-Serializer into the RGSS script library and convert the data to JSON in the following code:
-```ruby
-file1 = File.open("Data/Actors.rxdata","rb")
-actors = Marshal.load(file1)
-file2 = File.open("Actors.json", "w")
-file2.write(Serializer.new.stringify(actors))
-file1.close
-file2.close
+## Data Export
+### 1. Place the Data folder in the CodeAndExample folder
+### 2. Operation instruction:
+``` shell
+ruby rxdata_json_excel.rb 2json
 ```
-### 2. I'm not sure yet. The author doesn't know how to use references in Excel, so it's possible that only a portion of non-reference data will be allowed to be imported during the JSON-excel interchange (which is the majority of the data).
+Expected results:
+```
+Write file Actors.json successed!
+Write file Enemies.json successed!
+Write file Weapons.json successed!
+All successed!
+```
+### 3.Operation instruction:
+```
+node json-excel 2excel
+```
+Expected results:
+```
+JsonToExcel run successfully !
+```
+### 4."Database. XLSX "appears in the CodeAndExample directory.Get started!
+
+## Data Import
+### 运行指令：
+```
+ruby rxdata_json_excel.rb 2rxdata
+```
+Expected results:
+```
+Write file Actors.rxdata successed!
+Write file Enemies.rxdata successed!
+Write file Weapons.rxdata successed!
+All successed!
+```
+Because this process is read-only to XLSX files, you can save Excel and run commands to synchronize data without closing excel.
+
+# Filling in the Configuration File
+### Demo only provides data for Actors, Weapons, and Enemies. To process more files and data, you need to fill in config.rb and config.js.
+- bind_files：Describes which database members to process. The corresponding value can be "AllAvailable" or an array. Only the members of the array will be synchronized.
+- words：Used to adjust the name of the data in the table.
