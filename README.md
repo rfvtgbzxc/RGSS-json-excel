@@ -28,7 +28,7 @@ gem install read_excel
 # Theoretical workflow
 ## Data Export
 ### 1. Place the Data folder in the CodeAndExample folder
-### 2. Operation instruction:
+### 2. Run Shell:
 ``` shell
 ruby rxdata_json_excel.rb 2json
 ```
@@ -39,7 +39,7 @@ Write file Enemies.json successed!
 Write file Weapons.json successed!
 All successed!
 ```
-### 3.Operation instruction:
+### 3.Run Shell:
 ```
 node json-excel 2excel
 ```
@@ -50,7 +50,7 @@ JsonToExcel run successfully !
 ### 4."Database. XLSX "appears in the CodeAndExample directory.Get started!
 
 ## Data Import
-### 运行指令：
+### Run Shell:
 ```
 ruby rxdata_json_excel.rb 2rxdata
 ```
