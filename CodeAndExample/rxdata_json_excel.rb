@@ -1,7 +1,7 @@
 require_relative "RGSS1Modules"
 require_relative "config"
 require "base64"
-require 'read_excel'
+require "read_excel"
 # unsupport:
 # Class, Module, Struct, hash key of object
 # A json file includes series of value, key-value pairs and array.
@@ -18,7 +18,7 @@ require 'read_excel'
 # :xxx        symbol
 # ;xxx        symbol link
 # @xxx        object link
-# 
+#
 # To distinguish key of ture, false, nil, number, string, symbol(key must be a string in josn), some key has a special prefix, or itself is special:
 # true        true
 # false       false
@@ -40,7 +40,6 @@ require 'read_excel'
 # !!!xxx      normal string which start with chars "!!"
 #
 # That's all need to be known ;)
-
 
 class Serializer
   def initialize(dereference = false)
@@ -66,16 +65,16 @@ class Serializer
   end
 
   def decorate_key_string(str)
-    if str[0] == '!' or str[0] == ';' or str[0] == '@' or str[0] == '&' or str[0] == '#' or str == 'true' or str == 'false' or str == 'nil'
-      '!' + str
+    if str[0] == "!" or str[0] == ";" or str[0] == "@" or str[0] == "&" or str[0] == "#" or str == "true" or str == "false" or str == "nil"
+      "!" + str
     else
       str
     end
   end
 
   def decorate_value_string(str)
-    if str[0] == '!' or str[0] == ';' or str[0] == '@' or str[0] == '&' or str[0] == 'T' or str[0] == 'A' 
-      '!' + str
+    if str[0] == "!" or str[0] == ";" or str[0] == "@" or str[0] == "&" or str[0] == "T" or str[0] == "A"
+      "!" + str
     else
       str
     end
@@ -99,34 +98,36 @@ class Serializer
     end
     arr
   end
+
   def handle_Arraylike(obj)
-    json = '['
+    json = "["
     # if obj.is_a?(Table)
-    #   obj = table_to_arr(obj) 
+    #   obj = table_to_arr(obj)
     #   json += '"T"'
     # else
     #   json += '"A"'
     # end
     for i in 0...obj.size
       json += stringify_help(obj[i])
-      json += ',' unless i == obj.size-1
+      json += "," unless i == obj.size - 1
     end
-    json += ']'
+    json += "]"
     return json
   end
+
   def stringify_help(obj)
-    json = ''
+    json = ""
     if @object_list.include?(obj) and !@dereference
       json += "\"@#{@object_list[obj]}\""
       return json
     end
     case obj
     when true
-      json += 'true'
+      json += "true"
     when false
-      json += 'false'
+      json += "false"
     when nil
-      json += 'null'
+      json += "null"
     when Numeric
       json += obj.to_s
     when String
@@ -145,7 +146,7 @@ class Serializer
       add_object(obj)
       json += '{"&type":"hash"'
       (0...obj.size).each do |i|
-        json += ','
+        json += ","
         k = obj.keys[i]
         v = obj[k]
         if k.is_a?(String)
@@ -166,17 +167,17 @@ class Serializer
             json += "\";#{@symbol_list[k]}\""
           end
         else
-          raise 'key of hash in json must be one of these: string, symbol, number, true, false, nil!'
+          raise "key of hash in json must be one of these: string, symbol, number, true, false, nil!"
         end
-        json += ':'
+        json += ":"
         json += stringify_help(v)
       end
-      json += '}'
+      json += "}"
     when Object
       add_object(obj)
       json += "{\"&type\":\"object\", \"&class\":\"#{obj.class.name}\""
       obj.instance_variables.each do |var_symbol|
-        json += ','
+        json += ","
         value = obj.instance_variable_get(var_symbol)
         if !@symbol_list.include?(var_symbol) or @dereference
           add_symbol(var_symbol)
@@ -184,16 +185,16 @@ class Serializer
         else
           json += "\";#{@symbol_list[var_symbol]}\""
         end
-        json += ':'
-        if(obj.is_a?(Table))
+        json += ":"
+        if (obj.is_a?(Table))
           json += "\"#{Base64.strict_encode64(obj.data)}\""
         else
           json += stringify_help(value)
         end
       end
-      json += '}' 
+      json += "}"
     else
-      raise('unrecognized obj type')
+      raise("unrecognized obj type")
     end
     json
   end
@@ -205,20 +206,18 @@ class Serializer
 
   # this is for ruby 1.9
   def get_class
-
   end
 
   # this is customized for RGSS Database
   def partial_prase(str, obj)
-
   end
 end
 
 def rxDataToJson
   for file_name in ExcelToRxdataConfig::BindFiles.keys
-    file1 = File.open("Data/#{file_name}.rxdata","rb")
+    file1 = File.open("Data/#{file_name}.rxdata", "rb")
     data = Marshal.load(file1)
-    file2 = File.open("Json/#{file_name}.json","w")
+    file2 = File.open("Json/#{file_name}.json", "w")
     file2.write(Serializer.new(true).stringify(data))
     file1.close
     file2.close
@@ -226,16 +225,18 @@ def rxDataToJson
   end
   puts "All successed!"
 end
+
 def parse(obj, type)
   case type
-  when 'bool'
+  when "bool"
     return true if obj == 1
     return false if obj == 0
     raise "unsupported bool value #{obj} !"
   else
-    raise 'unsupported type!'
+    raise "unsupported type!"
   end
 end
+
 def excelToRxData
   for page_name, page_setting in ExcelToRxdataConfig::BindFiles
     if not File.exist?("Data/#{page_name}.rxdata")
@@ -243,7 +244,7 @@ def excelToRxData
       return
     end
   end
-  workbook = ReadExcel.new('Database.xlsx')
+  workbook = ReadExcel.new("Database.xlsx")
   worksheets = {}
   workbook.worksheets.each do |sheet|
     worksheets[sheet.name] = sheet
@@ -251,25 +252,58 @@ def excelToRxData
   for page_name, page_setting in ExcelToRxdataConfig::BindFiles
     sheet = worksheets[page_name]
     next if sheet.nil?
-    file = File.open("Data/#{page_name}.rxdata","rb")
+    file = File.open("Data/#{page_name}.rxdata", "rb")
     data = Marshal.load(file)
     file.close
-    file = File.open("Data/#{page_name}_back.rxdata","wb")
-    Marshal.dump(data, file)
-    file.close
-    columns = page_setting == "AllAvailable" ? ExcelToRxdataConfig::Attributes[page_name].keys : page_setting
-    for rowIndex in 1...data.size
-      row = sheet.row(rowIndex)
-      item = data[row[0]]   
-      for columnIndex in 1...columns.size
-        cell = row[columnIndex]
-        # force convert if specified
-        type = ExcelToRxdataConfig::Attributes[page_name][columns[columnIndex]]['type']
-        cell = parse(cell, type) if not type.nil?
-        item.instance_variable_set("@#{columns[columnIndex]}", cell)
+    attrs = {}
+    if page_setting == "AllAvailable"
+      attrs = ExcelToRxdataConfig::Attributes[page_name]
+    else
+      for attr_key in page_setting
+        attrs[attr_key] = ExcelToRxdataConfig::Attributes[page_name][attr_key]
       end
     end
-    file = File.open("Data/#{page_name}.rxdata","wb")
+    attr_to_col_index = {}
+    attr_from_name = {}
+    for attr_key, attr_val in attrs
+      attr_name = attr_val["name"].nil? ? attr_val : attr_val["name"]
+      attr_from_name[attr_name] = attr_key
+    end
+    row0 = sheet.row(0)
+    col_index = 0
+    collected = 0
+    while true
+      if collected == attrs.size
+        break
+      elsif col_index > 1000 # too large number
+        raise "can not find all the attribute in the sheet of #{page_name}"
+      else
+        attr_name = row0[col_index]
+        if (!attr_name.nil?) and (!attr_from_name[attr_name].nil?)
+          attr_to_col_index[attr_from_name[attr_name]] = col_index
+          collected += 1
+        end
+        col_index += 1
+      end
+    end
+
+    file = File.open("Data/#{page_name}_back.rxdata", "wb")
+    Marshal.dump(data, file)
+    file.close
+
+    id_col_index = attr_to_col_index["id"]
+    for rowIndex in 1...data.size
+      row = sheet.row(rowIndex)
+      item = data[row[id_col_index]]
+      for attr_key, attr_val in attrs
+        attr_type = attr_val["type"]
+        cell = row[attr_to_col_index[attr_key]]
+        # force convert if specified
+        cell = parse(cell, attr_type) if not attr_type.nil?
+        item.instance_variable_set("@#{attr_key}", cell)
+      end
+    end
+    file = File.open("Data/#{page_name}.rxdata", "wb")
     Marshal.dump(data, file)
     file.close
     puts "Write file #{page_name}.rxdata successed!"
@@ -288,10 +322,6 @@ when "2rxdata"
 else
   puts "unrecognized param #{ARGV[0]}, choose '2json' or '2rxdata'."
 end
-
-
-
-
 
 # a = [1, 2, 'vince', ['vince2']]
 # b = :hello
